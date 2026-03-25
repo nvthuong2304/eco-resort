@@ -8,6 +8,9 @@
     <h4 style="margin-top:0; color: #333; font-size: 15px;">🏦 Rút Vcoin Về Ngân Hàng</h4>
     <input type="text" id="bank-name" placeholder="Tên Ngân hàng / Ví điện tử">
     <input type="text" id="bank-acc" placeholder="Số tài khoản / Số điện thoại">
-    <input type="number" id="draw-val" placeholder="Số lượng rút (Tối thiểu 50,000 Vcoin)">
-    <button onclick="window.showToast('🚀 Đã gửi yêu cầu rút tiền!')" style="width: 100%; background: #10b981; color: white; padding: 12px; border-radius: 10px; font-weight: bold;">TẠO LỆNH RÚT</button>
+    <input type="number" id="draw-val" placeholder="Ví dụ: 50000, 60000...">
+    <p style="font-size: 11px; color: #e74c3c; margin-top: -5px; margin-bottom: 10px;">
+        *Tối thiểu 50.000 Vcoin và chỉ được rút số chẵn (bội số của 10.000).
+    </p>
+    <button onclick="window.handleWithdraw()" style="width: 100%; background: #10b981; color: white; padding: 12px; border-radius: 10px; font-weight: bold;">TẠO LỆNH RÚT</button>
 </div>

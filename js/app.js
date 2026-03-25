@@ -4,7 +4,6 @@ window.income = parseFloat(localStorage.getItem('income')); if (isNaN(window.inc
 window.claimedStarLevel = parseInt(localStorage.getItem('claimedStarLevel')) || 0;
 let lastLogin = parseInt(localStorage.getItem('lastLogin')) || Date.now();
 
-// Cập nhật tên mới và thời gian chuẩn (Ép lấy Level từ máy cũ, thông số từ Code mới)
 let savedData = JSON.parse(localStorage.getItem('buildings')) || {};
 window.buildings = {
     'b1': { id: 'b1', name: 'Khách sạn', icon: '🏠', level: savedData.b1?.level || 0, basePrice: 100, baseInc: 10, baseTime: 10, color: '#f1c40f', upgradeEnd: savedData.b1?.upgradeEnd || 0 },
@@ -17,10 +16,8 @@ window.buildings = {
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// TÍNH TOÁN CẤP TỔNG THỂ VÔ HẠN (Lấy Level thấp nhất trong 5 công trình)
 window.calcStats = function() {
-    let totalInc = 0; 
-    let minLevel = Infinity;
+    let totalInc = 0; let minLevel = Infinity;
     for (let key in window.buildings) {
         let b = window.buildings[key];
         if(b.level > 0) totalInc += b.baseInc * b.level;
@@ -33,14 +30,12 @@ window.calcStats();
 
 window.showToast = function(msg) {
     if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-    let t = document.createElement('div');
-    t.className = 'toast-msg'; t.innerText = msg;
+    let t = document.createElement('div'); t.className = 'toast-msg'; t.innerText = msg;
     document.body.appendChild(t);
     setTimeout(() => t.classList.add('show'), 10);
     setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
 };
 
-// NHẬN THƯỞNG CẤP TỔNG THỂ
 window.claimStarReward = function() {
     let nextLvl = window.claimedStarLevel + 1;
     if (window.resortStars >= nextLvl) {
@@ -49,27 +44,24 @@ window.claimStarReward = function() {
         window.claimedStarLevel = nextLvl;
         localStorage.setItem('scoin', window.scoin);
         localStorage.setItem('claimedStarLevel', window.claimedStarLevel);
-        window.showToast(`🎉 Nhận thành công ${reward.toLocaleString('vi-VN')} Scoin cho Cấp ${nextLvl}⭐!`);
+        window.showToast(`🎉 Nhận thành công ${reward.toLocaleString('vi-VN')} Scoin!`);
         window.renderHomeUI();
     } else {
-        window.showToast(`❌ Bạn cần nâng TẤT CẢ công trình lên tối thiểu cấp ${nextLvl} để nhận thưởng!`);
+        window.showToast(`❌ Cần lên ${nextLvl}⭐ để nhận thưởng!`);
     }
 };
-
-// ======================= CÁC HÀM RENDER UI =======================
 
 window.renderHomeUI = function() {
     if(document.getElementById('home-scoin')) document.getElementById('home-scoin').innerText = Math.floor(window.scoin).toLocaleString('vi-VN');
     if(document.getElementById('home-income')) document.getElementById('home-income').innerText = window.income.toLocaleString('vi-VN');
     if(document.getElementById('star-display')) document.getElementById('star-display').innerText = window.resortStars + "⭐";
 
-    // Nút nhận thưởng thăng cấp
     let nextLvl = window.claimedStarLevel + 1;
     let rewardAmt = Math.floor(5000 * Math.pow(1.5, nextLvl - 1));
     let canClaim = window.resortStars >= nextLvl;
     if(document.getElementById('reward-btn')) {
-        document.getElementById('reward-btn').innerText = canClaim ? `🎁 Nhận ${rewardAmt.toLocaleString('vi-VN')} SC` : `🎁 Cấp ${nextLvl} thưởng ${rewardAmt.toLocaleString('vi-VN')} SC`;
-        document.getElementById('reward-btn').style.background = canClaim ? '#27ae60' : '#95a5a6';
+        document.getElementById('reward-btn').innerText = canClaim ? `🎁 Nhận ${rewardAmt.toLocaleString('vi-VN')} SC` : `🎁 Cấp ${nextLvl}: ${rewardAmt.toLocaleString('vi-VN')} SC`;
+        document.getElementById('reward-btn').style.background = canClaim ? '#e67e22' : 'rgba(0,0,0,0.3)';
     }
 
     let ownedHTML = ""; let now = Date.now();
@@ -109,13 +101,11 @@ window.renderShopUI = function() {
     document.getElementById('shop-list').innerHTML = shopHTML;
 };
 
-// Giao diện Quy đổi
 window.renderExchangeUI = function() {
     if(document.getElementById('ex-scoin-bal')) document.getElementById('ex-scoin-bal').innerText = Math.floor(window.scoin).toLocaleString('vi-VN');
     if(document.getElementById('ex-vcoin-bal')) document.getElementById('ex-vcoin-bal').innerText = Math.floor(window.vcoin).toLocaleString('vi-VN');
 };
 
-// Giao diện Văn phòng
 window.renderOfficeUI = function() {
     if(document.getElementById('off-vcoin')) document.getElementById('off-vcoin').innerText = Math.floor(window.vcoin).toLocaleString('vi-VN');
 };
@@ -135,8 +125,7 @@ window.upgradeBuilding = function(key) {
 };
 
 window.instantFinish = function(key) {
-    let b = window.buildings[key];
-    let now = Date.now();
+    let b = window.buildings[key]; let now = Date.now();
     if (b.upgradeEnd && b.upgradeEnd > now) {
         let timeLeft = Math.ceil((b.upgradeEnd - now) / 1000);
         let cost = timeLeft * 5; 
@@ -146,6 +135,26 @@ window.instantFinish = function(key) {
             window.renderShopUI();
         } else window.showToast("❌ Thiếu Scoin để xong ngay!");
     }
+};
+
+window.setMaxScoin = function() {
+    document.getElementById('sell-scoin-input').value = Math.floor(window.scoin);
+    window.calcSell();
+};
+
+window.setMaxVcoin = function() {
+    document.getElementById('buy-vcoin-input').value = Math.floor(window.vcoin);
+    window.calcBuy();
+};
+
+window.calcSell = function() {
+    let val = parseInt(document.getElementById('sell-scoin-input').value.replace(/[^0-9]/g, '')) || 0;
+    document.getElementById('sell-preview').innerText = Math.floor(val / 10).toLocaleString('vi-VN');
+};
+
+window.calcBuy = function() {
+    let val = parseInt(document.getElementById('buy-vcoin-input').value.replace(/[^0-9]/g, '')) || 0;
+    document.getElementById('buy-preview').innerText = (val * 10).toLocaleString('vi-VN');
 };
 
 window.sellScoin = function() {
@@ -170,16 +179,30 @@ window.buyScoin = function() {
     } else window.showToast("❌ Không đủ Vcoin!");
 };
 
-window.calcSell = function() {
-    let val = parseInt(document.getElementById('sell-scoin-input').value.replace(/[^0-9]/g, '')) || 0;
-    document.getElementById('sell-preview').innerText = Math.floor(val / 10).toLocaleString('vi-VN');
-};
-window.calcBuy = function() {
-    let val = parseInt(document.getElementById('buy-vcoin-input').value.replace(/[^0-9]/g, '')) || 0;
-    document.getElementById('buy-preview').innerText = (val * 10).toLocaleString('vi-VN');
-};
+// ======================= LOGIC RÚT TIỀN (VĂN PHÒNG) =======================
+window.handleWithdraw = function() {
+    let bank = document.getElementById('bank-name').value;
+    let acc = document.getElementById('bank-acc').value;
+    let val = parseInt(document.getElementById('draw-val').value.replace(/[^0-9]/g, ''));
 
-// ======================= HỆ THỐNG VÀ CHUYỂN TAB =======================
+    if (!bank || !acc || isNaN(val)) {
+        return window.showToast("❌ Vui lòng điền đầy đủ thông tin!");
+    }
+    if (val < 50000) {
+        return window.showToast("❌ Rút tối thiểu 50.000 Vcoin!");
+    }
+    if (val % 10000 !== 0) {
+        return window.showToast("❌ Chỉ rút số chẵn (Ví dụ: 50000, 60000)!");
+    }
+    if (window.vcoin >= val) {
+        window.vcoin -= val;
+        window.showToast("🚀 Đã tạo lệnh rút " + val.toLocaleString('vi-VN') + " Vcoin!");
+        window.renderOfficeUI();
+        document.getElementById('draw-val').value = "";
+    } else {
+        window.showToast("❌ Số dư Vcoin không đủ!");
+    }
+};
 
 window.loadTab = function(tabName) {
     fetch('./tabs/' + tabName + '.html?v=' + Date.now())

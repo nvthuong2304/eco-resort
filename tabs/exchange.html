@@ -7,17 +7,23 @@
 </div>
 
 <div class="card">
-    <h4 style="margin-top:0; color: #333;">📉 Bán Scoin lấy Vcoin</h4>
-    <p style="font-size: 12px; color: #666; margin-top: 0;">Tỷ lệ: 10 Scoin = 1 Vcoin</p>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h4 style="margin:0; color: #333;">📉 Quy đổi Scoin sang Vcoin</h4>
+        <button onclick="window.setMaxScoin()" style="background: #f8d7da; color: #c0392b; font-size: 11px; padding: 4px 8px; border-radius: 5px; font-weight: bold;">Tất cả</button>
+    </div>
+    <p style="font-size: 12px; color: #666; margin-top: 5px;">Tỷ lệ: 10 Scoin = 1 Vcoin</p>
     <input type="number" id="sell-scoin-input" placeholder="Nhập số Scoin..." onkeyup="window.calcSell()">
     <div style="text-align: right; margin-bottom: 10px; font-size: 13px;">Nhận: <b id="sell-preview" style="color:#27ae60;">0</b> Vcoin</div>
-    <button onclick="window.sellScoin()" style="width: 100%; background: #e74c3c; color: white;">BÁN SCOIN</button>
+    <button onclick="window.sellScoin()" style="width: 100%; background: #e74c3c; color: white;">QUY ĐỔI SCOIN</button>
 </div>
 
 <div class="card">
-    <h4 style="margin-top:0; color: #333;">📈 Mua Scoin bằng Vcoin</h4>
-    <p style="font-size: 12px; color: #666; margin-top: 0;">Tỷ lệ: 1 Vcoin = 10 Scoin</p>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h4 style="margin:0; color: #333;">📈 Quy đổi Vcoin sang Scoin</h4>
+        <button onclick="window.setMaxVcoin()" style="background: #d4e6f1; color: #2980b9; font-size: 11px; padding: 4px 8px; border-radius: 5px; font-weight: bold;">Tất cả</button>
+    </div>
+    <p style="font-size: 12px; color: #666; margin-top: 5px;">Tỷ lệ: 1 Vcoin = 10 Scoin</p>
     <input type="number" id="buy-vcoin-input" placeholder="Nhập số Vcoin..." onkeyup="window.calcBuy()">
     <div style="text-align: right; margin-bottom: 10px; font-size: 13px;">Nhận: <b id="buy-preview" style="color:#2980b9;">0</b> Scoin</div>
-    <button onclick="window.buyScoin()" style="width: 100%; background: #2980b9; color: white;">MUA SCOIN</button>
+    <button onclick="window.buyScoin()" style="width: 100%; background: #2980b9; color: white;">QUY ĐỔI VCOIN</button>
 </div>
