@@ -1,33 +1,25 @@
-// Giả định số dư VNĐ (sau này lưu vào LocalStorage)
-let vndBalance = 0;
+if(document.getElementById('ex-scoin')) {
+    document.getElementById('ex-scoin').innerText = Math.floor(window.scoin).toLocaleString();
+}
 
-function sellScoin() {
-    let amount = parseInt(document.getElementById('sc-to-sell').value);
-    let msg = document.getElementById('exchange-msg');
-    
-    // Kiểm tra xem scoin có đủ không (biến scoin được thừa kế từ app)
+window.calcVcoin = function() {
+    let val = document.getElementById('scoin-to-sell').value || 0;
+    document.getElementById('vcoin-preview').innerText = ((val / 1000) * 800).toLocaleString();
+};
+
+window.processExchange = function() {
+    let amount = parseInt(document.getElementById('scoin-to-sell').value);
     if (isNaN(amount) || amount < 1000) {
-        msg.innerText = "❌ Tối thiểu phải bán 1,000 SC!";
-        msg.style.color = "red";
+        window.showToast("❌ Vui lòng nhập tối thiểu 1,000 Scoin!");
         return;
     }
-
-    if (scoin >= amount) {
-        let earnedVnd = (amount / 1000) * 800;
-        scoin -= amount; // Trừ Scoin
-        vndBalance += earnedVnd; // Cộng VNĐ
-        
-        msg.innerText = "✅ Bạn đã đổi thành công " + earnedVnd.toLocaleString() + " VNĐ";
-        msg.style.color = "green";
-        
-        // Cập nhật hiển thị nếu có
-        if(typeof updateDisplay === "function") updateDisplay();
-        
-        // Lưu lại vào bộ nhớ máy (LocalStorage)
-        localStorage.setItem('scoin', scoin);
-        localStorage.setItem('vnd', vndBalance);
+    if (window.scoin >= amount) {
+        let money = (amount / 1000) * 800;
+        window.scoin -= amount;
+        window.vcoin += money; // Cộng Vcoin
+        window.showToast("✅ Đổi thành công " + money.toLocaleString() + " Vcoin!");
+        window.loadTab('exchange'); // Tải lại trang để cập nhật số dư
     } else {
-        msg.innerText = "❌ Bạn không đủ Scoin!";
-        msg.style.color = "red";
+        window.showToast("❌ Không đủ Scoin để bán!");
     }
-}
+};

@@ -1,45 +1,19 @@
 <div class="card" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white;">
     <h3 style="margin:0;">💱 Trung Tâm Quy Đổi</h3>
-    <p style="margin-top: 5px;">Scoin hiện có: <b id="ex-scoin" style="font-size: 1.2em;">0</b> SC</p>
+    <p style="margin-top: 5px; font-size: 15px;">Scoin hiện có: <b id="ex-scoin" style="font-size: 1.3em;">0</b> Scoin</p>
     <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; font-size: 14px;">
-        Tỷ giá: <b>1,000 SC = 800 VNĐ</b>
+        Tỷ giá: <b>1,000 Scoin = 800 Vcoin</b>
     </div>
 </div>
 
 <div class="card">
     <h4 style="margin-top:0; color: #333;">Nhập số lượng bán</h4>
-    <input type="number" id="scoin-to-sell" placeholder="Tối thiểu 1,000 SC" onkeyup="window.calcVND()">
+    <input type="number" id="scoin-to-sell" placeholder="Tối thiểu 1,000 Scoin" onkeyup="window.calcVcoin()">
     
-    <div style="background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center;">
+    <div style="background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center; border: 1px solid #e2e8f0;">
         <span style="color: #64748b; font-size: 14px;">Bạn sẽ nhận được</span><br>
-        <b id="vnd-preview" style="color: #10b981; font-size: 24px;">0</b> <b style="color: #10b981;">VNĐ</b>
+        <b id="vcoin-preview" style="color: #10b981; font-size: 24px;">0</b> <b style="color: #10b981;">Vcoin</b>
     </div>
     
-    <button onclick="window.processExchange()" style="width: 100%; background: #f5576c; color: white;">BÁN SCOIN</button>
+    <button onclick="window.processExchange()" style="width: 100%; background: #f5576c; color: white; padding: 12px; border-radius: 10px; font-weight: bold;">BÁN SCOIN</button>
 </div>
-
-<script>
-    document.getElementById('ex-scoin').innerText = Math.floor(window.scoin).toLocaleString();
-    
-    window.calcVND = function() {
-        let val = document.getElementById('scoin-to-sell').value || 0;
-        document.getElementById('vnd-preview').innerText = ((val / 1000) * 800).toLocaleString();
-    };
-
-    window.processExchange = function() {
-        let amount = parseInt(document.getElementById('scoin-to-sell').value);
-        if (isNaN(amount) || amount < 1000) {
-            window.showToast("❌ Vui lòng nhập tối thiểu 1,000 SC!");
-            return;
-        }
-        if (window.scoin >= amount) {
-            let money = (amount / 1000) * 800;
-            window.scoin -= amount;
-            window.vndBalance += money;
-            window.showToast("✅ Đổi thành công " + money.toLocaleString() + " VNĐ!");
-            loadTab('exchange');
-        } else {
-            window.showToast("❌ Không đủ Scoin để bán!");
-        }
-    };
-</script>

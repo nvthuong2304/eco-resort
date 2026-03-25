@@ -1,48 +1,22 @@
 <div class="card" style="background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; text-align: center;">
     <h3 style="margin:0;">🏢 Văn Phòng Kế Toán</h3>
-    <p style="opacity: 0.8; font-size: 13px;">Số dư tiền mặt</p>
-    <h1 style="margin: 10px 0; color: #fbbf24; font-size: 32px;"><span id="off-vnd">0</span> VNĐ</h1>
+    <p style="opacity: 0.8; font-size: 13px; margin-top: 5px;">Số dư tài sản thực</p>
+    <h1 style="margin: 10px 0; color: #fbbf24; font-size: 32px;"><span id="off-vcoin">0</span> Vcoin</h1>
 </div>
 
 <div class="card">
-    <h4 style="margin-top:0; color: #333;">📢 Nhiệm vụ Hệ thống</h4>
+    <h4 style="margin-top:0; color: #333; font-size: 15px;">📢 Nhiệm vụ Hệ thống</h4>
     <p style="font-size: 13px; color: #64748b;">Tham gia cộng đồng để nhận vốn khởi nghiệp.</p>
-    <button onclick="window.joinTelegramTask()" style="width: 100%; background: #0088cc; color: white; display: flex; justify-content: center; align-items: center; gap: 10px;">
-        <span>✈️</span> Tham gia Group (+10,000 SC)
+    <button onclick="window.joinTelegramTask()" style="width: 100%; background: #0088cc; color: white; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 12px; border-radius: 10px;">
+        <span>✈️</span> Tham gia Group (+10,000 Scoin)
     </button>
 </div>
 
 <div class="card">
-    <h4 style="margin-top:0; color: #333;">🏦 Rút Tiền Về Ngân Hàng</h4>
+    <h4 style="margin-top:0; color: #333; font-size: 15px;">🏦 Rút Vcoin Về Ngân Hàng</h4>
     <input type="text" id="bank-name" placeholder="Tên Ngân hàng / Ví điện tử">
     <input type="text" id="bank-acc" placeholder="Số tài khoản / Số điện thoại">
-    <input type="number" id="draw-val" placeholder="Số tiền rút (Tối thiểu 50,000đ)">
+    <input type="number" id="draw-val" placeholder="Số lượng rút (Tối thiểu 50,000 Vcoin)">
     
-    <button onclick="window.handleWithdraw()" style="width: 100%; background: #10b981; color: white;">TẠO LỆNH RÚT TIỀN</button>
+    <button onclick="window.handleWithdraw()" style="width: 100%; background: #10b981; color: white; padding: 12px; border-radius: 10px; font-weight: bold;">TẠO LỆNH RÚT</button>
 </div>
-
-<script>
-    document.getElementById('off-vnd').innerText = Math.floor(window.vndBalance).toLocaleString();
-
-    window.handleWithdraw = function() {
-        let bank = document.getElementById('bank-name').value;
-        let acc = document.getElementById('bank-acc').value;
-        let val = parseInt(document.getElementById('draw-val').value);
-
-        if (!bank || !acc || isNaN(val)) {
-            window.showToast("❌ Vui lòng điền đầy đủ thông tin!");
-            return;
-        }
-        if (val < 50000) {
-            window.showToast("❌ Rút tối thiểu 50,000 VNĐ");
-            return;
-        }
-        if (window.vndBalance >= val) {
-            window.vndBalance -= val;
-            window.showToast("🚀 Gửi lệnh rút " + val.toLocaleString() + "đ thành công!");
-            loadTab('office');
-        } else {
-            window.showToast("❌ Số dư VNĐ không đủ!");
-        }
-    };
-</script>

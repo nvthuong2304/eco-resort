@@ -1,75 +1,99 @@
-<div class="card" style="background: linear-gradient(135deg, #059669, #10b981); color: white; border: none;">
+<div class="card" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; padding: 20px;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="margin:0; font-size: 22px;">🏝️ Eco Resort</h2>
-        <button class="btn-checkin" onclick="window.dailyCheckin()">🎁 Điểm danh</button>
+        <h2 style="margin:0;">🏝️ Eco Resort <span id="star-display" style="color: #f1c40f; font-size: 18px;">⭐</span></h2>
+        <button onclick="window.inviteFriends()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; font-size: 12px; padding: 6px 10px;">
+            👥 Mời bạn
+        </button>
     </div>
-    <p style="margin:8px 0; font-size: 14px; opacity: 0.9;">Khu Nghỉ Dưỡng: <b id="resort-level">Cấp 1</b></p>
     <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; margin-top: 15px;">
-        <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: bold;">
-            <span>💰 <span id="display-scoin">0</span> SC</span>
-            <span style="color: #a7f3d0;">📈 +<span id="display-income">0</span>/h</span>
+        <div style="display: flex; justify-content: space-between; font-weight: bold;">
+            <span>💰 <span id="home-scoin">0</span> Scoin</span>
+            <span style="color: #a7f3d0;">📈 +<span id="home-income">0</span>/h</span>
         </div>
     </div>
 </div>
 
-<h3 style="margin-left: 15px; color: #475569; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">🏗️ Cửa hàng xây dựng</h3>
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 0 15px;">
+    <h3 style="color: #2c3e50; font-size: 15px;">Tài sản của tôi</h3>
+    <button onclick="document.getElementById('shop-modal').style.display='flex'" style="background: #3498db; color: white; padding: 8px 15px; font-size: 13px;">
+        🛒 Mở Cửa Hàng
+    </button>
+</div>
 
-<div class="card" style="display: flex; align-items: center; padding: 12px 15px;">
-    <div style="font-size: 35px; margin-right: 15px;">🏠</div>
-    <div style="flex-grow: 1;">
-        <h4 style="margin:0 0 4px 0;">Bungalow Gỗ</h4>
-        <p style="margin:0; font-size: 12px; color: #64748b;">Thu nhập: +100/h</p>
-    </div>
-    <div style="text-align: right;">
-        <b style="display: block; color: #059669; font-size: 14px; margin-bottom: 5px;">1,000 SC</b>
-        <button onclick="window.buyBuilding('Bungalow Gỗ', 1000, 100)" style="background: #e2e8f0; color: #0f172a; padding: 6px 12px; font-size: 13px;">Xây ngay</button>
+<div id="owned-grid" class="grid-2" style="padding: 0 15px;"></div>
+
+<div id="shop-modal" class="modal-overlay" onclick="if(event.target==this) this.style.display='none'">
+    <div class="modal-content">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+            <h3 style="margin:0;">🛒 Cửa Hàng & Nâng Cấp</h3>
+            <button onclick="document.getElementById('shop-modal').style.display='none'" style="background: #e74c3c; color: white; padding: 5px 10px;">Đóng</button>
+        </div>
+        <div id="shop-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
     </div>
 </div>
 
-<div class="card" style="display: flex; align-items: center; padding: 12px 15px;">
-    <div style="font-size: 35px; margin-right: 15px;">🍴</div>
-    <div style="flex-grow: 1;">
-        <h4 style="margin:0 0 4px 0;">Nhà Hàng Biển</h4>
-        <p style="margin:0; font-size: 12px; color: #64748b;">Thu nhập: +600/h</p>
-    </div>
-    <div style="text-align: right;">
-        <b style="display: block; color: #059669; font-size: 14px; margin-bottom: 5px;">5,000 SC</b>
-        <button onclick="window.buyBuilding('Nhà Hàng Biển', 5000, 600)" style="background: #e2e8f0; color: #0f172a; padding: 6px 12px; font-size: 13px;">Xây ngay</button>
-    </div>
-</div>
+<script>
+    window.renderHomeUI = function() {
+        document.getElementById('home-scoin').innerText = Math.floor(window.scoin).toLocaleString();
+        document.getElementById('home-income').innerText = window.income.toLocaleString();
+        
+        let stars = "";
+        for(let i=0; i<window.resortStars; i++) stars += "⭐";
+        document.getElementById('star-display').innerText = stars;
 
-<div class="card" style="display: flex; align-items: center; padding: 12px 15px;">
-    <div style="font-size: 35px; margin-right: 15px;">🌊</div>
-    <div style="flex-grow: 1;">
-        <h4 style="margin:0 0 4px 0;">Hồ Bơi Vô Cực</h4>
-        <p style="margin:0; font-size: 12px; color: #64748b;">Thu nhập: +2,000/h</p>
-    </div>
-    <div style="text-align: right;">
-        <b style="display: block; color: #059669; font-size: 14px; margin-bottom: 5px;">15,000 SC</b>
-        <button onclick="window.buyBuilding('Hồ Bơi', 15000, 2000)" style="background: #e2e8f0; color: #0f172a; padding: 6px 12px; font-size: 13px;">Xây ngay</button>
-    </div>
-</div>
+        // Render công trình đã sở hữu
+        let ownedHTML = "";
+        for (let key in window.buildings) {
+            let b = window.buildings[key];
+            if (b.level > 0) {
+                ownedHTML += `
+                <div class="grid-item">
+                    <div style="font-size: 30px;">${b.icon}</div>
+                    <h4>${b.name} <span style="color:${b.color}">Lv.${b.level}</span></h4>
+                    <p>+${(b.baseInc * b.level).toLocaleString()} Scoin/h</p>
+                </div>`;
+            }
+        }
+        if(ownedHTML === "") ownedHTML = `<p style="grid-column: span 2; text-align:center; color:#999; font-size: 13px;">Chưa có công trình nào. Hãy vào cửa hàng!</p>`;
+        document.getElementById('owned-grid').innerHTML = ownedHTML;
 
-<div class="card" style="display: flex; align-items: center; padding: 12px 15px;">
-    <div style="font-size: 35px; margin-right: 15px;">🦌</div>
-    <div style="flex-grow: 1;">
-        <h4 style="margin:0 0 4px 0;">Khu Thú Cảnh</h4>
-        <p style="margin:0; font-size: 12px; color: #64748b;">Thu nhập: +7,500/h</p>
-    </div>
-    <div style="text-align: right;">
-        <b style="display: block; color: #059669; font-size: 14px; margin-bottom: 5px;">50,000 SC</b>
-        <button onclick="window.buyBuilding('Khu Thú Cảnh', 50000, 7500)" style="background: #e2e8f0; color: #0f172a; padding: 6px 12px; font-size: 13px;">Xây ngay</button>
-    </div>
-</div>
+        // Render Cửa hàng
+        let shopHTML = "";
+        for (let key in window.buildings) {
+            let b = window.buildings[key];
+            let nextPrice = Math.floor(b.basePrice * Math.pow(1.5, b.level));
+            let btnText = b.level === 0 ? "Mua mới" : "Nâng cấp";
+            
+            shopHTML += `
+            <div style="background: white; padding: 12px; border-radius: 12px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div style="font-size: 35px; margin-right: 15px;">${b.icon}</div>
+                <div style="flex-grow: 1;">
+                    <h4 style="margin:0 0 4px 0;">${b.name} <span style="font-size:11px; color:#666;">Lv.${b.level}</span></h4>
+                    <p style="margin:0; font-size: 11px; color: #10b981;">+${b.baseInc.toLocaleString()} Scoin/h (Mỗi cấp)</p>
+                </div>
+                <div style="text-align: right;">
+                    <b style="display: block; color: #e67e22; font-size: 13px; margin-bottom: 5px;">${nextPrice.toLocaleString()} SC</b>
+                    <button onclick="window.upgradeBuilding('${key}')" style="background: ${b.color}; color: white; padding: 6px 12px; font-size: 12px;">${btnText}</button>
+                </div>
+            </div>`;
+        }
+        document.getElementById('shop-list').innerHTML = shopHTML;
+    };
 
-<div class="card" style="display: flex; align-items: center; padding: 12px 15px; border: 2px solid #38bdf8;">
-    <div style="font-size: 35px; margin-right: 15px;">🚁</div>
-    <div style="flex-grow: 1;">
-        <h4 style="margin:0 0 4px 0;">Bãi Trực Thăng</h4>
-        <p style="margin:0; font-size: 12px; color: #64748b;">Thu nhập: +35,000/h</p>
-    </div>
-    <div style="text-align: right;">
-        <b style="display: block; color: #059669; font-size: 14px; margin-bottom: 5px;">200,000 SC</b>
-        <button onclick="window.buyBuilding('Bãi Trực Thăng', 200000, 35000)" style="background: #38bdf8; color: white; padding: 6px 12px; font-size: 13px;">Xây ngay</button>
-    </div>
-</div>
+    window.upgradeBuilding = function(key) {
+        let b = window.buildings[key];
+        let price = Math.floor(b.basePrice * Math.pow(1.5, b.level));
+        
+        if (window.scoin >= price) {
+            window.scoin -= price;
+            b.level += 1;
+            window.calcStats();
+            window.showToast(`✅ Đã nâng cấp ${b.name} lên Cấp ${b.level}!`);
+            window.renderHomeUI();
+        } else {
+            window.showToast(`❌ Thiếu ${Math.floor(price - window.scoin).toLocaleString()} Scoin!`);
+        }
+    };
+
+    window.renderHomeUI();
+</script>
