@@ -1,31 +1,29 @@
-// Tải dữ liệu cũ từ máy người dùng lên
-let scoin = parseInt(localStorage.getItem('scoin')) || 2000;
-let vndBalance = parseInt(localStorage.getItem('vnd')) || 0;
-let income = parseInt(localStorage.getItem('income')) || 0;
+// Khởi tạo dữ liệu
+window.scoin = parseFloat(localStorage.getItem('scoin')) || 2000;
+window.vndBalance = parseFloat(localStorage.getItem('vnd')) || 0;
+window.income = parseFloat(localStorage.getItem('income')) || 0;
 
-// Mỗi 5 giây tự động lưu một lần
-setInterval(() => {
-    localStorage.setItem('scoin', scoin);
-    localStorage.setItem('vnd', vndBalance);
-    localStorage.setItem('income', income);
-}, 5000);
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// Hàm chuyển tab
 function loadTab(tabName) {
-    fetch('tabs/' + tabName + '.html')
+    // Thêm dấu chấm (.) trước /tabs để GitHub hiểu đúng đường dẫn
+    fetch('./tabs/' + tabName + '.html')
         .then(response => response.text())
         .then(data => {
             document.getElementById('app-content').innerHTML = data;
             
-            // Tự động nạp file JS tương ứng với tab
             const script = document.createElement('script');
-            script.src = 'js/' + tabName + '.js';
+            script.src = './js/' + tabName + '.js?v=' + Date.now();
             document.body.appendChild(script);
         })
-        .catch(err => console.error("Lỗi tải tab:", err));
+        .catch(err => console.error("Lỗi:", err));
 }
 
-// Mặc định load tab Xây dựng khi mở app
+setInterval(() => {
+    localStorage.setItem('scoin', window.scoin);
+    localStorage.setItem('vnd', window.vndBalance);
+    localStorage.setItem('income', window.income);
+}, 2000);
+
 loadTab('build');
