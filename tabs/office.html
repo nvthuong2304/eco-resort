@@ -1,29 +1,33 @@
 <div class="card" style="background: #2c3e50; color: white; text-align: center;">
     <h3 style="margin:0;">🏢 Văn Phòng Điều Hành</h3>
-    <p style="opacity: 0.8;">Quản lý doanh thu của bạn</p>
-    <h1 style="margin: 10px 0; color: #f1c40f;"><span id="off-vnd">0</span> VNĐ</h1>
+    <p style="opacity: 0.8; font-size: 0.9em;">Quản lý doanh thu của bạn</p>
+    <h1 style="margin: 10px 0; color: #f1c40f; font-size: 30px;"><span id="off-vnd">0</span> VNĐ</h1>
 </div>
 
 <div class="card">
     <h4 style="margin-top:0;">🏦 Rút Tiền Về Tài Khoản</h4>
     <p style="font-size: 0.8em; color: #888;">Hỗ trợ: Momo, Zalopay, Ngân hàng nội địa</p>
     
-    <input type="text" id="bank-name" placeholder="Tên ngân hàng / Ví điện tử" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+    <input type="text" id="bank-name" placeholder="Ví dụ: Momo hoặc Techcombank" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px;">
     
-    <input type="text" id="bank-acc" placeholder="Số tài khoản / Số điện thoại" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+    <input type="text" id="bank-acc" placeholder="Số tài khoản / Số điện thoại" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px;">
     
-    <input type="number" id="draw-val" placeholder="Số tiền muốn rút (Min 50,000)" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+    <input type="number" id="draw-val" placeholder="Số tiền muốn rút (Tối thiểu 50,000)" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px;">
     
-    <button onclick="handleWithdraw()" style="width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 5px; font-weight: bold;">GỬI YÊU CẦU RÚT TIỀN</button>
+    <button onclick="handleWithdraw()" style="width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px;">GỬI YÊU CẦU RÚT TIỀN</button>
 </div>
 
-<div class="card" style="font-size: 0.85em; background: #fffbe6; border: 1px solid #ffe58f;">
-    <b>⚠️ Lưu ý:</b> Lệnh rút tiền sẽ được admin duyệt trong vòng 1-24h làm việc. Vui lòng kiểm tra kỹ thông tin tài khoản.
+<div class="card" style="font-size: 0.85em; background: #fffbe6; border: 1px solid #ffe58f; color: #856404; padding: 15px;">
+    <b>⚠️ Lưu ý bảo mật:</b>
+    <p style="margin: 5px 0;">- Lệnh rút tiền sẽ được admin duyệt trong vòng 1-24h.</p>
+    <p style="margin: 5px 0;">- Kiểm tra kỹ thông tin ngân hàng để tránh mất tiền.</p>
 </div>
 
 <script>
+    // Cập nhật số dư VNĐ hiển thị
     document.getElementById('off-vnd').innerText = Math.floor(window.vndBalance).toLocaleString();
 
+    // Hàm xử lý gửi lệnh rút tiền
     function handleWithdraw() {
         let bank = document.getElementById('bank-name').value;
         let acc = document.getElementById('bank-acc').value;
@@ -40,11 +44,17 @@
         }
 
         if (window.vndBalance >= val) {
-            window.vndBalance -= val;
-            alert("🚀 Lệnh rút " + val.toLocaleString() + " VNĐ của bạn đã được gửi lên hệ thống!");
-            loadTab('office'); // Cập nhật hiển thị
+            window.vndBalance -= val; // Trừ VNĐ trong ví
+            
+            // Dùng Telegram WebApp HapticFeedback để tạo hiệu ứng rung thành công
+            if (window.Telegram.WebApp.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+            }
+            
+            alert("🚀 Lệnh rút " + val.toLocaleString() + " VNĐ đã được gửi! Vui lòng đợi admin duyệt.");
+            loadTab('office'); // Cập nhật hiển thị số dư
         } else {
-            alert("❌ Số dư VNĐ không đủ!");
+            alert("❌ Số dư VNĐ không đủ để rút!");
         }
     }
 </script>
