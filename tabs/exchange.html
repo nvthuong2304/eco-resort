@@ -1,0 +1,44 @@
+<div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+    <h3 style="margin:0;">💱 Trung Tâm Quy Đổi</h3>
+    <p>Scoin của bạn: <b id="ex-scoin">0</b> SC</p>
+    <p>Tỷ giá: 1,000 SC = <b>800 VNĐ</b></p>
+</div>
+
+<div class="card">
+    <label style="font-weight: bold; color: #333;">Số lượng Scoin muốn bán:</label>
+    <input type="number" id="scoin-to-sell" placeholder="Tối thiểu 1,000 SC" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;">
+    
+    <div style="background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.9em; color: #666;">
+        Ước tính nhận: <b id="vnd-preview" style="color: #e74c3c;">0</b> VNĐ
+    </div>
+    
+    <button onclick="processExchange()" style="width: 100%; padding: 15px; background: #f5576c; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1em;">ĐỔI SANG VNĐ</button>
+</div>
+
+<script>
+    // Cập nhật số dư và xem trước giá trị quy đổi
+    document.getElementById('ex-scoin').innerText = Math.floor(window.scoin).toLocaleString();
+    
+    document.getElementById('scoin-to-sell').addEventListener('input', function(e) {
+        let val = e.target.value || 0;
+        document.getElementById('vnd-preview').innerText = ((val / 1000) * 800).toLocaleString();
+    });
+
+    function processExchange() {
+        let amount = parseInt(document.getElementById('scoin-to-sell').value);
+        if (isNaN(amount) || amount < 1000) {
+            alert("❌ Vui lòng nhập tối thiểu 1,000 SC!");
+            return;
+        }
+        if (window.scoin >= amount) {
+            let money = (amount / 1000) * 800;
+            window.scoin -= amount;
+            window.vndBalance += money;
+            
+            alert("✅ Thành công! Bạn đã nhận được " + money.toLocaleString() + " VNĐ");
+            loadTab('exchange'); // Tải lại tab để cập nhật số dư hiển thị
+        } else {
+            alert("❌ Bạn không đủ Scoin!");
+        }
+    }
+</script>

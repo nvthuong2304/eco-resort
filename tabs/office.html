@@ -1,0 +1,50 @@
+<div class="card" style="background: #2c3e50; color: white; text-align: center;">
+    <h3 style="margin:0;">🏢 Văn Phòng Điều Hành</h3>
+    <p style="opacity: 0.8;">Quản lý doanh thu của bạn</p>
+    <h1 style="margin: 10px 0; color: #f1c40f;"><span id="off-vnd">0</span> VNĐ</h1>
+</div>
+
+<div class="card">
+    <h4 style="margin-top:0;">🏦 Rút Tiền Về Tài Khoản</h4>
+    <p style="font-size: 0.8em; color: #888;">Hỗ trợ: Momo, Zalopay, Ngân hàng nội địa</p>
+    
+    <input type="text" id="bank-name" placeholder="Tên ngân hàng / Ví điện tử" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+    
+    <input type="text" id="bank-acc" placeholder="Số tài khoản / Số điện thoại" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+    
+    <input type="number" id="draw-val" placeholder="Số tiền muốn rút (Min 50,000)" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+    
+    <button onclick="handleWithdraw()" style="width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 5px; font-weight: bold;">GỬI YÊU CẦU RÚT TIỀN</button>
+</div>
+
+<div class="card" style="font-size: 0.85em; background: #fffbe6; border: 1px solid #ffe58f;">
+    <b>⚠️ Lưu ý:</b> Lệnh rút tiền sẽ được admin duyệt trong vòng 1-24h làm việc. Vui lòng kiểm tra kỹ thông tin tài khoản.
+</div>
+
+<script>
+    document.getElementById('off-vnd').innerText = Math.floor(window.vndBalance).toLocaleString();
+
+    function handleWithdraw() {
+        let bank = document.getElementById('bank-name').value;
+        let acc = document.getElementById('bank-acc').value;
+        let val = parseInt(document.getElementById('draw-val').value);
+
+        if (!bank || !acc || isNaN(val)) {
+            alert("❌ Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        if (val < 50000) {
+            alert("❌ Số tiền rút tối thiểu là 50,000 VNĐ");
+            return;
+        }
+
+        if (window.vndBalance >= val) {
+            window.vndBalance -= val;
+            alert("🚀 Lệnh rút " + val.toLocaleString() + " VNĐ của bạn đã được gửi lên hệ thống!");
+            loadTab('office'); // Cập nhật hiển thị
+        } else {
+            alert("❌ Số dư VNĐ không đủ!");
+        }
+    }
+</script>
