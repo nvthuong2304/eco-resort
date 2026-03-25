@@ -1,19 +1,23 @@
-<div class="card" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white;">
-    <h3 style="margin:0;">💱 Trung Tâm Quy Đổi</h3>
-    <p style="margin-top: 5px; font-size: 15px;">Scoin hiện có: <b id="ex-scoin" style="font-size: 1.3em;">0</b> Scoin</p>
-    <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; font-size: 14px;">
-        Tỷ giá: <b>1,000 Scoin = 800 Vcoin</b>
+<div class="card" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; text-align:center;">
+    <h3 style="margin:0;">💱 Trung Tâm Giao Dịch</h3>
+    <div style="display: flex; justify-content: space-around; margin-top: 10px; font-size: 14px;">
+        <div>Scoin: <b id="ex-scoin-bal" style="font-size: 1.2em;">0</b></div>
+        <div>Vcoin: <b id="ex-vcoin-bal" style="font-size: 1.2em;">0</b></div>
     </div>
 </div>
 
 <div class="card">
-    <h4 style="margin-top:0; color: #333;">Nhập số lượng bán</h4>
-    <input type="number" id="scoin-to-sell" placeholder="Tối thiểu 1,000 Scoin" onkeyup="window.calcVcoin()">
-    
-    <div style="background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center; border: 1px solid #e2e8f0;">
-        <span style="color: #64748b; font-size: 14px;">Bạn sẽ nhận được</span><br>
-        <b id="vcoin-preview" style="color: #10b981; font-size: 24px;">0</b> <b style="color: #10b981;">Vcoin</b>
-    </div>
-    
-    <button onclick="window.processExchange()" style="width: 100%; background: #f5576c; color: white; padding: 12px; border-radius: 10px; font-weight: bold;">BÁN SCOIN</button>
+    <h4 style="margin-top:0; color: #333;">📉 Bán Scoin lấy Vcoin</h4>
+    <p style="font-size: 12px; color: #666; margin-top: 0;">Tỷ lệ: 10 Scoin = 1 Vcoin</p>
+    <input type="number" id="sell-scoin-input" placeholder="Nhập số Scoin..." onkeyup="window.calcSell()">
+    <div style="text-align: right; margin-bottom: 10px; font-size: 13px;">Nhận: <b id="sell-preview" style="color:#27ae60;">0</b> Vcoin</div>
+    <button onclick="window.sellScoin()" style="width: 100%; background: #e74c3c; color: white;">BÁN SCOIN</button>
+</div>
+
+<div class="card">
+    <h4 style="margin-top:0; color: #333;">📈 Mua Scoin bằng Vcoin</h4>
+    <p style="font-size: 12px; color: #666; margin-top: 0;">Tỷ lệ: 1 Vcoin = 10 Scoin</p>
+    <input type="number" id="buy-vcoin-input" placeholder="Nhập số Vcoin..." onkeyup="window.calcBuy()">
+    <div style="text-align: right; margin-bottom: 10px; font-size: 13px;">Nhận: <b id="buy-preview" style="color:#2980b9;">0</b> Scoin</div>
+    <button onclick="window.buyScoin()" style="width: 100%; background: #2980b9; color: white;">MUA SCOIN</button>
 </div>
