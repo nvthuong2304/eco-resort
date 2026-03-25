@@ -1,14 +1,17 @@
 if(document.getElementById('ex-scoin')) {
-    document.getElementById('ex-scoin').innerText = Math.floor(window.scoin).toLocaleString();
+    document.getElementById('ex-scoin').innerText = Math.floor(window.scoin).toLocaleString('vi-VN');
 }
 
 window.calcVcoin = function() {
-    let val = document.getElementById('scoin-to-sell').value || 0;
-    document.getElementById('vcoin-preview').innerText = ((val / 1000) * 800).toLocaleString();
+    let rawVal = document.getElementById('scoin-to-sell').value.replace(/[^0-9]/g, ''); 
+    let val = parseInt(rawVal) || 0;
+    document.getElementById('vcoin-preview').innerText = ((val / 1000) * 800).toLocaleString('vi-VN');
 };
 
 window.processExchange = function() {
-    let amount = parseInt(document.getElementById('scoin-to-sell').value);
+    let rawVal = document.getElementById('scoin-to-sell').value.replace(/[^0-9]/g, '');
+    let amount = parseInt(rawVal);
+    
     if (isNaN(amount) || amount < 1000) {
         window.showToast("❌ Vui lòng nhập tối thiểu 1,000 Scoin!");
         return;
@@ -16,9 +19,13 @@ window.processExchange = function() {
     if (window.scoin >= amount) {
         let money = (amount / 1000) * 800;
         window.scoin -= amount;
-        window.vcoin += money; // Cộng Vcoin
-        window.showToast("✅ Đổi thành công " + money.toLocaleString() + " Vcoin!");
-        window.loadTab('exchange'); // Tải lại trang để cập nhật số dư
+        window.vcoin += money; 
+        
+        localStorage.setItem('scoin', window.scoin);
+        localStorage.setItem('vcoin', window.vcoin);
+        
+        window.showToast("✅ Đổi thành công " + money.toLocaleString('vi-VN') + " Vcoin!");
+        window.loadTab('exchange'); 
     } else {
         window.showToast("❌ Không đủ Scoin để bán!");
     }

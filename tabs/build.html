@@ -1,9 +1,6 @@
 <div class="card" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; padding: 20px;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h2 style="margin:0;">🏝️ Eco Resort <span id="star-display" style="color: #f1c40f; font-size: 18px;">⭐</span></h2>
-        <button onclick="window.inviteFriends()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; font-size: 12px; padding: 6px 10px;">
-            👥 Mời bạn
-        </button>
     </div>
     <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; margin-top: 15px;">
         <div style="display: flex; justify-content: space-between; font-weight: bold;">
@@ -15,18 +12,18 @@
 
 <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 15px;">
     <h3 style="color: #2c3e50; font-size: 15px;">Tài sản của tôi</h3>
-    <button onclick="document.getElementById('shop-modal').style.display='flex'" style="background: #3498db; color: white; padding: 8px 15px; font-size: 13px;">
+    <button onclick="window.openShop()" style="background: #3498db; color: white; padding: 8px 15px; font-size: 13px;">
         🛒 Mở Cửa Hàng
     </button>
 </div>
 
 <div id="owned-grid" class="grid-2" style="padding: 0 15px;"></div>
 
-<div id="shop-modal" class="modal-overlay" onclick="if(event.target==this) this.style.display='none'">
+<div id="shop-modal" class="modal-overlay" onclick="if(event.target==this) window.closeShop()">
     <div class="modal-content">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <h3 style="margin:0;">🛒 Cửa Hàng & Nâng Cấp</h3>
-            <button onclick="document.getElementById('shop-modal').style.display='none'" style="background: #e74c3c; color: white; padding: 5px 10px;">Đóng</button>
+            <button onclick="window.closeShop()" style="background: #e74c3c; color: white; padding: 5px 15px; font-size: 14px; border-radius: 8px;">Đóng X</button>
         </div>
         <div id="shop-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
     </div>
@@ -34,14 +31,13 @@
 
 <script>
     window.renderHomeUI = function() {
-        document.getElementById('home-scoin').innerText = Math.floor(window.scoin).toLocaleString();
-        document.getElementById('home-income').innerText = window.income.toLocaleString();
+        document.getElementById('home-scoin').innerText = Math.floor(window.scoin).toLocaleString('vi-VN');
+        document.getElementById('home-income').innerText = window.income.toLocaleString('vi-VN');
         
         let stars = "";
         for(let i=0; i<window.resortStars; i++) stars += "⭐";
         document.getElementById('star-display').innerText = stars;
 
-        // Render công trình đã sở hữu
         let ownedHTML = "";
         for (let key in window.buildings) {
             let b = window.buildings[key];
@@ -50,30 +46,29 @@
                 <div class="grid-item">
                     <div style="font-size: 30px;">${b.icon}</div>
                     <h4>${b.name} <span style="color:${b.color}">Lv.${b.level}</span></h4>
-                    <p>+${(b.baseInc * b.level).toLocaleString()} Scoin/h</p>
+                    <p>+${(b.baseInc * b.level).toLocaleString('vi-VN')} Scoin/h</p>
                 </div>`;
             }
         }
-        if(ownedHTML === "") ownedHTML = `<p style="grid-column: span 2; text-align:center; color:#999; font-size: 13px;">Chưa có công trình nào. Hãy vào cửa hàng!</p>`;
+        if(ownedHTML === "") ownedHTML = `<p style="grid-column: span 2; text-align:center; color:#999; font-size: 13px;">Chưa có công trình nào. Hãy Mở Cửa Hàng!</p>`;
         document.getElementById('owned-grid').innerHTML = ownedHTML;
 
-        // Render Cửa hàng
         let shopHTML = "";
         for (let key in window.buildings) {
             let b = window.buildings[key];
             let nextPrice = Math.floor(b.basePrice * Math.pow(1.5, b.level));
-            let btnText = b.level === 0 ? "Mua mới" : "Nâng cấp";
+            let btnText = b.level === 0 ? "Mua" : "Nâng";
             
             shopHTML += `
-            <div style="background: white; padding: 12px; border-radius: 12px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                <div style="font-size: 35px; margin-right: 15px;">${b.icon}</div>
+            <div style="background: white; padding: 12px; border-radius: 12px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eee;">
+                <div style="font-size: 30px; margin-right: 15px;">${b.icon}</div>
                 <div style="flex-grow: 1;">
                     <h4 style="margin:0 0 4px 0;">${b.name} <span style="font-size:11px; color:#666;">Lv.${b.level}</span></h4>
-                    <p style="margin:0; font-size: 11px; color: #10b981;">+${b.baseInc.toLocaleString()} Scoin/h (Mỗi cấp)</p>
+                    <p style="margin:0; font-size: 11px; color: #10b981;">+${b.baseInc.toLocaleString('vi-VN')}/h (Mỗi cấp)</p>
                 </div>
                 <div style="text-align: right;">
-                    <b style="display: block; color: #e67e22; font-size: 13px; margin-bottom: 5px;">${nextPrice.toLocaleString()} SC</b>
-                    <button onclick="window.upgradeBuilding('${key}')" style="background: ${b.color}; color: white; padding: 6px 12px; font-size: 12px;">${btnText}</button>
+                    <b style="display: block; color: #e67e22; font-size: 13px; margin-bottom: 5px;">${nextPrice.toLocaleString('vi-VN')} SC</b>
+                    <button onclick="window.upgradeBuilding('${key}')" style="background: ${b.color}; color: white; padding: 6px 15px; font-size: 12px;">${btnText}</button>
                 </div>
             </div>`;
         }
@@ -91,7 +86,7 @@
             window.showToast(`✅ Đã nâng cấp ${b.name} lên Cấp ${b.level}!`);
             window.renderHomeUI();
         } else {
-            window.showToast(`❌ Thiếu ${Math.floor(price - window.scoin).toLocaleString()} Scoin!`);
+            window.showToast(`❌ Thiếu ${Math.floor(price - window.scoin).toLocaleString('vi-VN')} Scoin!`);
         }
     };
 
