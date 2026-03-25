@@ -1,51 +1,45 @@
 <div class="card" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white;">
     <h3 style="margin:0;">💱 Trung Tâm Quy Đổi</h3>
-    <p>Scoin: <b id="ex-scoin">0</b> SC</p>
-    <p>Tỷ giá: 1,000 SC = <b style="font-size: 1.2em;">800 VNĐ</b></p>
+    <p style="margin-top: 5px;">Scoin hiện có: <b id="ex-scoin" style="font-size: 1.2em;">0</b> SC</p>
+    <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; font-size: 14px;">
+        Tỷ giá: <b>1,000 SC = 800 VNĐ</b>
+    </div>
 </div>
 
 <div class="card">
-    <label style="font-weight: bold; color: #333;">Số lượng Scoin muốn bán:</label>
-    <input type="number" id="scoin-to-sell" placeholder="Tối thiểu 1,000 SC" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px;">
+    <h4 style="margin-top:0; color: #333;">Nhập số lượng bán</h4>
+    <input type="number" id="scoin-to-sell" placeholder="Tối thiểu 1,000 SC" onkeyup="window.calcVND()">
     
-    <div style="background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 0.9em; color: #666; border: 1px solid #eee;">
-        Ước tính nhận: <b id="vnd-preview" style="color: #e74c3c; font-size: 1.2em;">0</b> VNĐ
+    <div style="background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: center;">
+        <span style="color: #64748b; font-size: 14px;">Bạn sẽ nhận được</span><br>
+        <b id="vnd-preview" style="color: #10b981; font-size: 24px;">0</b> <b style="color: #10b981;">VNĐ</b>
     </div>
     
-    <button onclick="processExchange()" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #f5576c, #f093fb); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px;">BÁN Scoin LẤY VNĐ</button>
+    <button onclick="window.processExchange()" style="width: 100%; background: #f5576c; color: white;">BÁN SCOIN</button>
 </div>
 
 <script>
-    // Cập nhật số dư Scoin hiển thị
     document.getElementById('ex-scoin').innerText = Math.floor(window.scoin).toLocaleString();
     
-    // Tự động tính toán số VNĐ nhận được khi người dùng nhập số Scoin
-    document.getElementById('scoin-to-sell').addEventListener('input', function(e) {
-        let val = e.target.value || 0;
+    window.calcVND = function() {
+        let val = document.getElementById('scoin-to-sell').value || 0;
         document.getElementById('vnd-preview').innerText = ((val / 1000) * 800).toLocaleString();
-    });
+    };
 
-    // Hàm xử lý đổi tiền
-    function processExchange() {
+    window.processExchange = function() {
         let amount = parseInt(document.getElementById('scoin-to-sell').value);
         if (isNaN(amount) || amount < 1000) {
-            alert("❌ Vui lòng nhập tối thiểu 1,000 SC!");
+            window.showToast("❌ Vui lòng nhập tối thiểu 1,000 SC!");
             return;
         }
         if (window.scoin >= amount) {
             let money = (amount / 1000) * 800;
-            window.scoin -= amount; // Trừ Scoin
-            window.vndBalance += money; // Cộng VNĐ
-            
-            // Dùng Telegram WebApp HapticFeedback để tạo hiệu ứng rung thành công
-            if (window.Telegram.WebApp.HapticFeedback) {
-                window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-            }
-            
-            alert("✅ Đã đổi thành công! Bạn nhận được " + money.toLocaleString() + " VNĐ");
-            loadTab('exchange'); // Tải lại tab để cập nhật số dư hiển thị
+            window.scoin -= amount;
+            window.vndBalance += money;
+            window.showToast("✅ Đổi thành công " + money.toLocaleString() + " VNĐ!");
+            loadTab('exchange');
         } else {
-            alert("❌ Số dư Scoin không đủ!");
+            window.showToast("❌ Không đủ Scoin để bán!");
         }
-    }
+    };
 </script>
