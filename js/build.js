@@ -15,17 +15,10 @@ window.buyBuilding = function(name, price, addIncome) {
         window.scoin -= price;
         window.income += addIncome;
         
-        localStorage.setItem('scoin', window.scoin);
-        localStorage.setItem('income', window.income);
-
-        if (window.Telegram?.WebApp?.HapticFeedback) {
-            window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-        }
-
-        alert("✅ Xây dựng thành công: " + name);
+        window.showToast("🏗️ Đã xây xong " + name + "!");
         window.updateBuildUI();
     } else {
-        alert("❌ Bạn cần thêm " + Math.floor(price - window.scoin).toLocaleString() + " SC!");
+        window.showToast("❌ Thiếu " + Math.floor(price - window.scoin).toLocaleString() + " SC!");
     }
 };
 

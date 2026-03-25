@@ -1,64 +1,58 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f6f9;
+    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+    background-color: #f0f4f8;
     margin: 0;
     padding-bottom: 80px;
     user-select: none;
-    color: #333;
+    color: #1a202c;
+    -webkit-tap-highlight-color: transparent;
 }
-
 .card {
     background: white;
     margin: 15px;
-    padding: 15px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+    padding: 18px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid rgba(255,255,255,0.8);
 }
-
 button {
     border: none;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 12px;
     font-weight: bold;
+    font-size: 15px;
     cursor: pointer;
-    transition: 0.1s;
+    transition: all 0.2s ease;
 }
-
 button:active {
-    transform: scale(0.96);
-    opacity: 0.8;
+    transform: scale(0.95);
 }
-
 input {
-    outline: none;
+    width: 100%; padding: 12px; margin-bottom: 12px; 
+    border: 1.5px solid #e2e8f0; border-radius: 10px;
+    font-size: 15px; outline: none; transition: 0.2s;
 }
-input:focus {
-    border-color: #3498db !important;
-}
+input:focus { border-color: #38bdf8; }
 
 .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 65px;
-    background: #ffffff;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    border-top: 1px solid #e1e8ed;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    position: fixed; bottom: 0; width: 100%; height: 65px;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+    display: flex; justify-content: space-around; align-items: center;
+    border-top: 1px solid #e2e8f0; box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    z-index: 100;
 }
+.nav-item { font-size: 22px; background: none; color: #94a3b8; }
+.nav-item.active { transform: scale(1.15); filter: drop-shadow(0 4px 6px rgba(16, 185, 129, 0.3)); }
 
-.nav-item {
-    font-size: 20px;
-    background: transparent;
-    color: #666;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+/* Nút điểm danh */
+.btn-checkin { background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; font-size: 13px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.4); }
 
-.nav-item.active {
-    color: #11998e;
-    transform: scale(1.1);
+/* Thông báo nổi (Toast) */
+.toast-msg {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: #1e293b; color: white; padding: 12px 24px;
+    border-radius: 30px; font-size: 14px; font-weight: bold;
+    z-index: 9999; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+.toast-msg.show { opacity: 1; top: 40px; }
